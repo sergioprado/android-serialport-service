@@ -13,7 +13,9 @@ public class SerialPortManager {
     private static ISerialPortService service;
 
     private SerialPortManager() {
-        IBinder binder = ServiceManager.getService(SERVICE_NAME);
+        // the service is registered by a persistent app that only starts after
+        // the user is unlocked, so the caller may need to wait for it
+        IBinder binder = ServiceManager.waitForService(SERVICE_NAME);
         service = ISerialPortService.Stub.asInterface(binder);
         if (service == null) {
             Log.e("SerialPortManager", "Failed to get reference to serialport");
